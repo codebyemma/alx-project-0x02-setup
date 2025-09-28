@@ -1,36 +1,34 @@
-"use client"; // add this if you're in Next.js app directory
-
-import { useEffect, useState } from "react";
+import React from "react";
+import { GetStaticProps } from "next";
 import { UserProps } from "@/interfaces";
 import UserCard from "@/components/common/UserCard";
+import Header from "@/components/layout/Header";
+type UsersPageProps = {
+  users: UserProps[];
+};
 
-const User: React.FC<UserProps>= ({name, email, address}) => {
-  const [data, setData] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
-      const result: UserProps[] = await response.json();
-      setData(result);
-    };
-
-    fetchData();
-  }, []);
-
+const UsersPage: React.FC<UsersPageProps> = ({ users }) => {
   return (
     <div>
-      {data.map((item) => (
-        <div>
+      <Header/>
+      {users.map((item) => (
         <UserCard
-          key={item.id}
           name={item.name}
           email={item.email}
           address={item.address}
         />
-        </div>
       ))}
     </div>
   );
 };
 
-export default User;
+export const getStaticProps: GetStaticProps = async () => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users: UserProps[] = await res.json();
+
+  return {
+    props: { users },
+  };
+};
+
+export default UsersPage;

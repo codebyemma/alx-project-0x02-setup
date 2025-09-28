@@ -2,6 +2,7 @@ import { useState } from "react";
 import Card from "@/components/common/Card";
 import PostModal from "@/components/common/PostModal";
 import { CardProps } from "@/interfaces";
+import Header from "@/components/layout/Header";
 const Home = () => {
     const [data, setData] = useState<CardProps | null>(null);
     const handleFormSubmit = (data: CardProps) => {
@@ -9,6 +10,7 @@ const Home = () => {
     };
     return (
         <div>
+            <Header />
             <PostModal onSubmitData={handleFormSubmit} />
             {data && <Card
             title={data.title}

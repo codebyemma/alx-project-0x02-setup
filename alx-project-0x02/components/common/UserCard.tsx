@@ -1,13 +1,19 @@
+import React from "react";
 import { UserProps } from "@/interfaces";
 
-const PostCard: React.FC<UserProps> = ({name, email, address}) => {
-    return(
+const UserCard: React.FC<UserProps> = ({ name, email, address }) => {
+    return (
         <div>
             <h1>{name}</h1>
             <p>{email}</p>
-        <p>{address?.street}, {address?.city}, {address?.zipcode}, {address?.suite}</p>
+            <p>
+                {address?.street}
+                {address?.suite ? `, ${address.suite}` : ""}
+                {address?.city ? `, ${address.city}` : ""}
+                {address?.zipcode ? `, ${address.zipcode}` : ""}
+            </p>
         </div>
     );
 };
 
-export default PostCard;
+export default UserCard;

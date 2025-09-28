@@ -1,33 +1,41 @@
-"use client"; // add this if you're in Next.js app directory
-
-import { useEffect, useState } from "react";
+import React from "react";
+import { GetStaticProps } from "next";
 import PostCard from "@/components/common/PostCard";
+import Header from "@/components/layout/Header";
+type Post = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+};
 
-const Posts = () => {
-  const [data, setData] = useState<any[]>([]);
+type PostsPageProps = {
+  posts: Post[];
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
-      const result = await response.json();
-      setData(result);
-    };
-
-    fetchData();
-  }, []);
-
+const Posts: React.FC<PostsPageProps> = ({ posts }) => {
   return (
     <div>
-      {data.map((item) => (
+      <Header />
+      {posts.map((item) => (
         <PostCard
           key={item.id}
-          title={item.name}
-          content={item.email}
-          userId={item.id}
+          title={item.title}
+          content={item.body}
+          userId={String(item.userId)}
         />
       ))}
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps<PostsPageProps> = async () => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts: Post[] = await res.json();
+
+  return {
+    props: { posts },
+  };
 };
 
 export default Posts;
